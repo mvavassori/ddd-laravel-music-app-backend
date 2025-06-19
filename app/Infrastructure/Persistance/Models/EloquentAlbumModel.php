@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Infrastructure\Persistance\Eloquent;
+namespace App\Infrastructure\Persistance\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AlbumModel extends Model {
+class EloquentAlbumModel extends Model {
     protected $fillable = [
         'title',
         'image_url',

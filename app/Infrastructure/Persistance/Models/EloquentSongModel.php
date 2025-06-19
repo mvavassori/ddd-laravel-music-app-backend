@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Infrastructure\Persistance\Eloquent;
+namespace App\Infrastructure\Persistance\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SongModel extends Model {
+class EloquentSongModel extends Model {
     protected $table = 'songs';
 
     protected $fillable = [

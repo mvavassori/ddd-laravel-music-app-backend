@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Infrastructure\Persistance;
+namespace App\Infrastructure\Persistance\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ArtistModel extends Model {
+class EloquentArtistModel extends Model {
     protected $fillable = [
         'name',
         'bio',

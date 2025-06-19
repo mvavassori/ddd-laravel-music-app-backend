@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\Persistance\Eloquent;
+namespace App\Infrastructure\Persistance\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -8,8 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class UserModel extends Authenticatable
-{
+class EloquentUserModel extends Authenticatable {
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
