@@ -8,22 +8,26 @@ use App\Domain\MusicCatalog\ValueObjects\SongId;
 use App\Domain\MusicCatalog\ValueObjects\AlbumId;
 use App\Domain\MusicCatalog\ValueObjects\ArtistId;
 use App\Domain\MusicCatalog\ValueObjects\Contribution;
+use App\Domain\MusicCatalog\ValueObjects\AlbumImageUrl;
 
 // every album must have at least one artist with the role that it 
 class Album implements JsonSerializable {
     private AlbumId $id;
     private string $title;
     private ?string $description;
+    private ?AlbumImageUrl $imageUrl;
     private array $contributions = [];
     private array $songIds = [];
 
     public function __construct(
             string $title,
             ?string $description = null,
+            ?AlbumImageUrl $imageUrl = null
         ) {
             $this->id = AlbumId::generate();
             $this->setTitle($title);
             $this->description = $description;
+            $this->imageUrl = $imageUrl;
     }
 
     private function setTitle(string $title) {
@@ -54,6 +58,23 @@ class Album implements JsonSerializable {
         $this->songIds[] = $songId;
     }
 
+
+    public function getId(): AlbumId {
+        return $this->id;
+    }
+
+    public function getTitle(): string {
+        return $this->title;
+    }
+
+    public function getDescription(): string {
+        return $this->description;
+    }
+
+    public function getImageUrl(): ?AlbumImageUrl {
+        return $this->imageUrl;
+    }
+
     public function jsonSerialize() {
         return [
             'id' => $this->id->getValue(),
@@ -62,5 +83,16 @@ class Album implements JsonSerializable {
             'song_ids' => $this->songIds,
             'contributions' => $this->contributions
         ];
+    }
+
+    public static function fromPersistance(
+        AlbumId $id,
+        string $title,
+        ?string $description = null,
+        ?AlbumImageUrl $imageUrl = null
+    ): Album {
+        $album = new self($title, $description, $imageUrl);
+        $album->id = $id; // use existing id rather using the generated one on object creation
+        return $album;
     }
 }

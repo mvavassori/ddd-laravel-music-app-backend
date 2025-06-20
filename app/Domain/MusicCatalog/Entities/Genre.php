@@ -13,6 +13,14 @@ class Genre {
         $this->name = $name;
     }
 
+    public function getId(): GenreId {
+        return $this->id;
+    }
+
+    public function getName(): string {
+        return $this->name;
+    }
+
     private function setName(string $name) {
         if (empty($name)) {
             throw new \DomainException('Genre name must not be empty');
@@ -25,5 +33,14 @@ class Genre {
             'id' => $this->id->getValue(),
             'name' => $this->name
         ];
+    }
+
+    public static function fromPersistance(
+        GenreId $id,
+        string $name
+    ): Genre {
+        $genre = new self($name);
+        $genre->id = $id;
+        return $genre;
     }
 }

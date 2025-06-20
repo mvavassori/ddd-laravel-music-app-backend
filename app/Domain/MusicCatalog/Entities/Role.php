@@ -20,10 +20,27 @@ class Role implements \JsonSerializable {
         $this->roleName = trim($name);
     }
 
+    public function getId(): RoleId {
+        return $this->id;
+    }
+
+    public function getName(): string {
+        return $this->name;
+    }
+
     public function jsonSerialize(): array {
         return [
             'id' => $this->id->getValue(),
             'name' => $this->name
         ];
+    }
+
+    public static function fromPersistance(
+        RoleId $id,
+        string $name
+    ): Role {
+        $role = new self($name);
+        $role->id = $id;
+        return $role;
     }
 }

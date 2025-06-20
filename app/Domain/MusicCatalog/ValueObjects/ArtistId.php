@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 class ArtistId {
     private string $value;
     public function __construct(string $value) {
-        // check if something else is generating this object that it shouldn't
+        // check if id is uuid
         if (!Str::isUuid($value)) {
             throw new \InvalidArgumentException("Invalid Artist UUID string: $value");
         }

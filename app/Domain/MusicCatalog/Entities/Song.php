@@ -31,6 +31,26 @@ class Song implements JsonSerializable{
         $this->title = trim($title);
     }
 
+    public function getId(): SongId {
+        return $this->id;
+    }
+
+    public function getTitle(): string {
+        return $this->title;
+    }
+
+    public function getGenreId(): GenreId {
+        return $this->genreId;
+    }
+
+    public function getAlbumId(): AlbumId|null {
+        return $this->albumId;
+    }
+
+    public function getContributions(): array {
+        return $this->contributions;
+    }
+
     public function addContributor(ArtistId $artistId, RoleId $roleId) {
         $newContributor = new Contribution($artistId, $roleId);
 
@@ -54,4 +74,15 @@ class Song implements JsonSerializable{
             'contributions' => $this->contributions
         ];
     }
+
+    public static function fromPersistance(
+        SongId $id,
+        string $title,
+        GenreId $genreId,
+        ?AlbumId $albumId = null,
+    ): Song {
+        $song = new self($title, $genreId, $albumId);
+        $song->id = $id;
+        return $song;
+    } 
 }

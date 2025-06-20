@@ -17,8 +17,8 @@ class Artist implements JsonSerializable {
 
     public function __construct(
         string $name,
-        string $bio,
-        ArtistImageUrl $imageUrl
+        ?string $bio = null,
+        ?ArtistImageUrl $imageUrl = null
     ) {
         $this->id = ArtistId::generate();
         $this->setName($name);
@@ -26,6 +26,40 @@ class Artist implements JsonSerializable {
         $this->imageUrl = $imageUrl;
     }
 
+    // getters
+    public function getId(): ArtistId {
+        return $this->id;
+    }
+
+    public function getName(): string {
+        return $this->name;
+    }
+
+    public function getBio(): string {
+        return $this->bio;
+    }
+
+    public function getImageUrl(): ArtistImageUrl {
+        return $this->imageUrl;
+    }
+
+    // methods used to update fields
+    public function updateName(string $name): void
+    {
+        $this->setName($name); // Uses existing validation
+    }
+    
+    public function updateBio(?string $bio): void
+    {
+        $this->bio = $bio;
+    }
+    
+    public function updateImageUrl(?ArtistImageUrl $imageUrl): void
+    {
+        $this->imageUrl = $imageUrl;
+    }
+
+    // validate name
     private function setName(string $name) {
         if (empty($name)) {
             throw new \DomainException('Artist name must not be empty');
@@ -38,7 +72,18 @@ class Artist implements JsonSerializable {
             'id' => $this->id->getValue(),
             'name' => $this->name,
             'bio' => $this->bio,
-            'image_url' => $this->imageUrl
+            'image_url' => $this->imageUrl ? $this->imageUrl->getValue() : null
         ];
+    }
+
+    public static function fromPersistance(
+        ArtistId $id,
+        string $name,
+        ?string $bio = null,
+        ?ArtistImageUrl $imageUrl = null
+    ): Artist {
+        $artist = new self($name, $bio, $imageUrl);
+        $artist->id = $id; // use existing id rather using the generated one on object creation
+        return $artist;
     }
 }
