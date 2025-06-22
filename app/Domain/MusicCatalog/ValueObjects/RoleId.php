@@ -22,4 +22,8 @@ class RoleId {
     public function getValue(): string {
         return $this->value;
     }
+
+    public function equals(RoleId $other): bool {
+        return $this->value === $other->value;
+    }
 }

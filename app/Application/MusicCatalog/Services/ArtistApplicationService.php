@@ -39,15 +39,13 @@ class ArtistApplicationService {
     }
 
     public function updateArtist(
-        string $id, 
-        ?string $name = null, 
-        ?string $bio = null, 
+        string $id,
+        ?string $name = null,
+        ?string $bio = null,
         ?string $imageUrlString = null,
-        bool $updateBio = false,
-        bool $updateImageUrl = false
     ): array {
         $artist = $this->artistRepository->find(new ArtistId($id));
-        
+
         if (!$artist) {
             throw new \DomainException("Artist not found");
         }
@@ -56,35 +54,38 @@ class ArtistApplicationService {
             // check uniqueness if name is changing
             if ($artist->getName() !== $name) {
                 $existingArtist = $this->artistRepository->findByName($name);
-                if ($existingArtist && !$existingArtist->getId() === $artist->getId()) {
+                if ($existingArtist && !$existingArtist->getId()->equals($artist->getId())) {
                     throw new \DomainException("Artist with name: {$name} already exists");
                 }
             }
             $artist->updateName($name);
         }
 
-        if ($updateBio) {
+        if ($bio !== null) {
             $artist->updateBio($bio);
         }
-        
-        if ($updateImageUrl) {
+
+        if ($imageUrlString !== null) {
             $imageUrl = null;
-            if ($imageUrlString) {
+            if ($imageUrlString !== '') {
                 $imageUrl = new ArtistImageUrl($imageUrlString);
             }
             $artist->updateImageUrl($imageUrl);
         }
-        
+
         // Save the updated entity
         $this->artistRepository->update($artist);
-        
+
         return $this->toArray($artist);
     }
 
     public function findArtist(string $id) {
         $artistId = new ArtistId($id);
         $artist = $this->artistRepository->find($artistId);
-        return $artist ? $this->toArray($artist) : null;
+        if (!$artist) {
+            throw new \DomainException("Artist with ID: {$id} not found");
+        }
+        return $this->toArray($artist);
     }
 
     public function findAllArtists() {
@@ -98,10 +99,13 @@ class ArtistApplicationService {
 
     public function findArtistWithContributions(string $id) {
         $result = $this->artistRepository->findWithContributions(new ArtistId($id));
+        if (!$result) {
+            throw new \DomainException("Artist with ID: {$id} not found");
+        }
         return [
             'artist' => $this->toArray($result['artist']),
             'contributions' => [
-                'albums' => array_map(function($item) {
+                'albums' => array_map(function ($item) {
                     return [
                         'album_id' => $item['album']->getId()->getValue(),
                         'album_title' => $item['album']->getTitle(),
@@ -109,7 +113,7 @@ class ArtistApplicationService {
                         'role_name' => $item['role']->getName()
                     ];
                 }, $result['albumContributions']),
-                'songs' => array_map(function($item) {
+                'songs' => array_map(function ($item) {
                     return [
                         'song_id' => $item['song']->getId()->getValue(),
                         'song_title' => $item['song']->getTitle(),
@@ -125,12 +129,12 @@ class ArtistApplicationService {
         $result = $this->artistRepository->findWithSongs(new ArtistId($id));
 
         if (!$result) {
-            return null;
+            throw new \DomainException("Artist with ID: {$id} not found");
         }
-        
+
         return [
             'artist' => $this->toArray($result['artist']),
-            'songs' => array_map(function($item) {
+            'songs' => array_map(function ($item) {
                 return [
                     'id' => $item['song']->getId()->getValue(),
                     'title' => $item['song']->getTitle(),
@@ -138,13 +142,13 @@ class ArtistApplicationService {
                     'album_id' => $item['song']->getAlbumId()?->getValue(),
                     'role' => $item['role']->getName()
                 ];
-            }, $result['songs'])
+            }, $result['songContributions'])
         ];
     }
 
     public function deleteArtist(string $id) {
         $artist = $this->artistRepository->find(new ArtistId($id));
-        
+
         if (!$artist) {
             throw new \DomainException("Artist not found");
         }

@@ -19,7 +19,7 @@ class ArtistController extends Controller {
             return response()->json($artist, 201);
         } catch (\DomainException $th) {
             return response()->json([
-                'message' => $th->getMessage()
+                'error' => $th->getMessage()
             ]);
         } catch (\Throwable $th) {
             Log::error("Failed to create artist.", [
@@ -36,16 +36,14 @@ class ArtistController extends Controller {
         try {
             $updated = $this->artistApplicationService->updateArtist(
                 $id,
-                $validated['name'] ?? null,
-                $validated['bio'] ?? null,
-                $validated['image_url'] ?? null,
-                $request->has('bio'),
-                $request->has('image_url')
+                $validatedData['name'] ?? null,
+                $validatedData['bio'] ?? null,
+                $validatedData['image_url'] ?? null
             );
-            
+
             return response()->json($updated);
         } catch (\DomainException $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
+            return response()->json(['error' => $e->getMessage()]);
         } catch (\Throwable $th) {
             Log::error("Failed to create artist.", [
                 'input' => $request->all(),

@@ -20,4 +20,8 @@ class GenreId {
     public function getValue(): string {
         return (string) $this->value;
     }
+
+    public function equals(GenreId $other): bool {
+        return $this->value === $other->value;
+    }
 }

@@ -33,7 +33,7 @@ class EloquentArtistRepository implements ArtistRepositoryInterface {
         return EloquentArtistModel::all();
     }
 
-    public function find(ArtistId $id) {
+    public function find(ArtistId $id): Artist|null {
         $eloquentArtist = EloquentArtistModel::find($id->getValue());
         if (!$eloquentArtist) {
             return null;
@@ -41,15 +41,15 @@ class EloquentArtistRepository implements ArtistRepositoryInterface {
         return $this->artistMapper->toDomain($eloquentArtist);
     }
 
-    public function findByName($name) {
-        $eloquentArtist = EloquentArtistModel::where('name', '=',$name)->first();
+    public function findByName($name): Artist|null {
+        $eloquentArtist = EloquentArtistModel::where('name', '=', $name)->first();
         if (!$eloquentArtist) {
             return null;
         }
         return $this->artistMapper->toDomain($eloquentArtist);
     }
 
-    public function create(Artist $artist) {
+    public function create(Artist $artist): Artist {
         DB::transaction(function () use (&$artist) {
             $artist = EloquentArtistModel::create($this->artistMapper->toPersistence($artist));
         });
@@ -63,14 +63,14 @@ class EloquentArtistRepository implements ArtistRepositoryInterface {
         });
     }
 
-    public function delete($id) {
-        return EloquentArtistModel::destroy($id);
+    public function delete(ArtistId $id) {
+        return EloquentArtistModel::destroy($id->getValue());
     }
 
-    public function findWithContributions($id) {
-        $eloquentArtist = EloquentArtistModel::find($id);
+    public function findWithContributions(ArtistId $id) {
+        $eloquentArtist = EloquentArtistModel::find($id->getValue());
 
-        if(!$eloquentArtist) {
+        if (!$eloquentArtist) {
             return null;
         }
 
@@ -80,14 +80,13 @@ class EloquentArtistRepository implements ArtistRepositoryInterface {
             ->with(['role', 'contributable'])
             ->get();
 
-        
-    
+
         $albumContributions = [];
         $songContributions = [];
-        
+
         foreach ($contributions as $contribution) {
             $role = $this->roleMapper->toDomain($contribution->role);
-            
+
             if ($contribution->contributable_type === EloquentAlbumModel::class) {
                 $album = $this->albumMapper->toDomain($contribution->contributable);
                 $albumContributions[] = [
@@ -113,7 +112,7 @@ class EloquentArtistRepository implements ArtistRepositoryInterface {
     public function findWithSongs($id) {
         $eloquentArtist = EloquentArtistModel::find($id);
 
-        if(!$eloquentArtist) {
+        if (!$eloquentArtist) {
             return null;
         }
 
@@ -128,7 +127,7 @@ class EloquentArtistRepository implements ArtistRepositoryInterface {
         foreach ($eloquentSongContributions as $songContribution) {
             $song = $this->songMapper->toDomain($songContribution->contributable);
             $role = $this->roleMapper->toDomain($songContribution->role);
-            
+
             $songContributions[] = [
                 'song' => $song,
                 'role' => $role
@@ -144,7 +143,7 @@ class EloquentArtistRepository implements ArtistRepositoryInterface {
     public function findWithAlbums($id) {
         $eloquentArtist = EloquentArtistModel::find($id);
 
-        if(!$eloquentArtist) {
+        if (!$eloquentArtist) {
             return null;
         }
 

@@ -20,14 +20,14 @@ class Album implements JsonSerializable {
     private array $songIds = [];
 
     public function __construct(
-            string $title,
-            ?string $description = null,
-            ?AlbumImageUrl $imageUrl = null
-        ) {
-            $this->id = AlbumId::generate();
-            $this->setTitle($title);
-            $this->description = $description;
-            $this->imageUrl = $imageUrl;
+        string $title,
+        ?string $description = null,
+        ?AlbumImageUrl $imageUrl = null
+    ) {
+        $this->id = AlbumId::generate();
+        $this->setTitle($title);
+        $this->description = $description;
+        $this->imageUrl = $imageUrl;
     }
 
     private function setTitle(string $title) {
@@ -42,8 +42,8 @@ class Album implements JsonSerializable {
 
         // check if a given contributor already exists in the $contributions array
         foreach ($this->contributions as $existingContributor) {
-            if ($existingContributor->getArtistId()->getValue() === $newContributor->getArtistId()->getValue()
-                && $existingContributor->getRoleId()->getValue() === $newContributor->getRoleId()->getValue()) {
+            if ($existingContributor->getArtistId()->equals($newContributor->getArtistId())
+                && $existingContributor->getRoleId()->equals($newContributor->getRoleId())) {
                 throw new \DomainException('Artist already has this role in this album');
             }
         }
@@ -51,8 +51,18 @@ class Album implements JsonSerializable {
         $this->contributions[] = $newContributor;
     }
 
+    public function replaceContributors(array $newContributions): void {
+        // Clear existing contributors
+        $this->contributions = [];
+
+        // Add new ones
+        foreach ($newContributions as $contribution) {
+            $this->addContributor($contribution['artistId'], $contribution['roleId']);
+        }
+    }
+
     public function addSong(SongId $songId) {
-        if(in_array($songId, $this->songIds)) {
+        if (in_array($songId, $this->songIds)) {
             throw new \DomainException('Song is already in the album');
         }
         $this->songIds[] = $songId;
@@ -73,6 +83,23 @@ class Album implements JsonSerializable {
 
     public function getImageUrl(): ?AlbumImageUrl {
         return $this->imageUrl;
+    }
+
+    public function getContributions(): array {
+        return $this->contributions;
+    }
+
+    // update methods
+    public function updateTitle(string $title) {
+        $this->title = $title;
+    }
+
+    public function updateDescription(string $description) {
+        $this->description = $description;
+    }
+
+    public function updateImageUrl(?AlbumImageUrl $imageUrl) {
+        $this->imageUrl = $imageUrl;
     }
 
     public function jsonSerialize() {

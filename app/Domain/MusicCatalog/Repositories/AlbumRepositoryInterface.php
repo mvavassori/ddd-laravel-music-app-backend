@@ -1,11 +1,16 @@
 <?php
 
-namespace App\Contracts\Domain\MusicCatalog\Repositories;
+namespace App\Domain\MusicCatalog\Repositories;
+
+use App\Domain\MusicCatalog\Entities\Album;
+use App\Domain\MusicCatalog\ValueObjects\AlbumId;
+
 
 interface AlbumRepositoryInterface {
-    public function find($id);
-    public function findWithRelations($id, array $relations);
-    public function create(array $data);
-    public function update($id, array $data);
-    public function delete($id);
+    public function find(AlbumId $id);
+    // public function findWithRelations($id, array $relations);
+    public function findWithSongs(AlbumId $id);
+    public function create(Album $album);
+    public function update(Album $album);
+    public function delete(AlbumId $id);
 }

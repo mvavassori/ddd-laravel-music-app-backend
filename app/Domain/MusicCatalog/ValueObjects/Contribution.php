@@ -2,9 +2,6 @@
 
 namespace App\Domain\MusicCatalog\ValueObjects;
 
-use App\Domain\MusicCatalog\Entities\Role;
-use App\Domain\MusicCatalog\Entities\Artist;
-
 class Contribution {
     private ArtistId $artistId;
     private RoleId $roleId;
@@ -14,11 +11,11 @@ class Contribution {
         $this->roleId = $roleId;
     }
 
-    public function getArtistId() {
+    public function getArtistId(): ArtistId {
         return $this->artistId;
     }
 
-    public function getRoleId() {
+    public function getRoleId(): RoleId {
         return $this->roleId;
     }
 }

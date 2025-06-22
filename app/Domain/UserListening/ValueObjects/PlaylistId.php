@@ -4,17 +4,17 @@ namespace App\Domain\UserListening\ValueObjects;
 
 use Illuminate\Support\Str;
 
-class UserId {
+class PlaylistId {
     private string $value;
 
     public function __construct(string $value) {
         if (!Str::isUuid($value)) {
-            throw new \InvalidArgumentException("Invalid User UUID string: $value");
+            throw new \DomainException("Invalid Playlist UUID string: $value");
         }
         $this->value = $value;
     }
 
-    public static function generate(): UserId {
+    public static function generate(): PlaylistId {
         return new self(Str::orderedUuid());
     }
 
@@ -22,7 +22,7 @@ class UserId {
         return $this->value;
     }
 
-    public function equals(UserId $other): bool {
+    public function equals(PlaylistId $other): bool {
         return $this->value === $other->value;
     }
 }

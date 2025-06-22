@@ -2,11 +2,14 @@
 
 namespace App\Contracts\Domain\MusicCatalog\Repositories;
 
+use App\Domain\MusicCatalog\Entities\Song;
+use App\Domain\MusicCatalog\ValueObjects\SongId;
+
 interface SongRepositoryInterface {
-    public function find($id);
-    public function findWithRelations($id, array $relations);
-    public function create(array $data);
-    public function update($id, array $data);
-    public function delete($id);
-    public function getSongsByGenreAtRandom($genre, $limit = 10);
+    public function find(SongId $id);
+    public function findWithContributions(SongId $id);
+    public function create(Song $song);
+    public function update(Song $song);
+    public function delete(SongId $id);
+    // public function getSongsByGenreAtRandom($genre, $limit = 10);
 }

@@ -22,4 +22,8 @@ class AlbumId {
     public function getValue(): string {
         return (string) $this->value;
     }
+
+    public function equals(AlbumId $other): bool {
+        return $this->value === $other->value;
+    }
 }

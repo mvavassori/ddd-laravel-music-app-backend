@@ -10,7 +10,7 @@ use App\Domain\MusicCatalog\ValueObjects\GenreId;
 use App\Domain\MusicCatalog\ValueObjects\ArtistId;
 use App\Domain\MusicCatalog\ValueObjects\Contribution;
 
-class Song implements JsonSerializable{
+class Song implements JsonSerializable {
     private SongId $id;
     private string $title;
     private GenreId $genreId;
@@ -29,6 +29,31 @@ class Song implements JsonSerializable{
             throw new \DomainException('Title must not be empty');
         }
         $this->title = trim($title);
+    }
+
+    public function addContributor(ArtistId $artistId, RoleId $roleId) {
+        $newContributor = new Contribution($artistId, $roleId);
+
+        // check if a given contributor already exists in the $contributions array
+        foreach ($this->contributions as $existingContributor) {
+            if ($existingContributor->getArtistId()->equals($newContributor->getArtistId())
+                && $existingContributor->getRoleId()->equals($newContributor->getRoleId())) {
+                throw new \DomainException('Artist already has this role in this song');
+            }
+        }
+
+        $this->contributions[] = $newContributor;
+    }
+
+
+    public function replaceContributors(array $newContributions): void {
+        // Clear existing contributors
+        $this->contributions = [];
+
+        // Add new ones
+        foreach ($newContributions as $contribution) {
+            $this->addContributor($contribution['artistId'], $contribution['roleId']);
+        }
     }
 
     public function getId(): SongId {
@@ -51,18 +76,17 @@ class Song implements JsonSerializable{
         return $this->contributions;
     }
 
-    public function addContributor(ArtistId $artistId, RoleId $roleId) {
-        $newContributor = new Contribution($artistId, $roleId);
+    // update methods
+    public function updateTitle(string $title) {
+        $this->title = $title;
+    }
 
-        // check if a given contributor already exists in the $contributions array
-        foreach ($this->contributions as $existingContributor) {
-            if ($existingContributor->getArtistId() === $newContributor->getArtistId()
-                && $existingContributor->getRoleId() === $newContributor->getRoleId()) {
-                throw new \DomainException('Artist already has this role in this song');
-            }
-        }
+    public function updateGenreId(GenreId $genreId) {
+        $this->genreId = $genreId;
+    }
 
-        $this->contributions[] = $newContributor;
+    public function updateAlbumId(AlbumId $albumId) {
+        $this->albumId = $albumId;
     }
 
     public function jsonSerialize() {
@@ -84,5 +108,5 @@ class Song implements JsonSerializable{
         $song = new self($title, $genreId, $albumId);
         $song->id = $id;
         return $song;
-    } 
+    }
 }
