@@ -18,7 +18,7 @@ class Song implements JsonSerializable {
     private array $contributions = [];
 
     public function __construct(string $title, GenreId $genreId, ?AlbumId $albumId = null) {
-        $this->songId = SongId::generate();
+        $this->id = SongId::generate();
         $this->setTitle($title);
         $this->genreId = $genreId;
         $this->albumId = $albumId;

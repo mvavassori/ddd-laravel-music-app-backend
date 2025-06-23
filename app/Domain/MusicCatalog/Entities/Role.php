@@ -9,7 +9,7 @@ class Role implements \JsonSerializable {
     private string $name;
 
     public function __construct(string $name) {
-        $this->roleId = RoleId::generate();
+        $this->id = RoleId::generate();
         $this->setName($name);
     }
 
@@ -17,7 +17,7 @@ class Role implements \JsonSerializable {
         if (empty($name)) {
             throw new \DomainException('Role name must not be empty');
         }
-        $this->roleName = trim($name);
+        $this->name = trim($name);
     }
 
     public function getId(): RoleId {

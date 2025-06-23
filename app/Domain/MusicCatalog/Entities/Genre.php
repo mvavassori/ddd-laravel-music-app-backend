@@ -9,8 +9,8 @@ class Genre {
     private string $name;
 
     public function __construct(string $name) {
-        $this->genreId = GenreId::generate();
-        $this->name = $name;
+        $this->id = GenreId::generate();
+        $this->setName($name);
     }
 
     public function getId(): GenreId {
@@ -25,7 +25,7 @@ class Genre {
         if (empty($name)) {
             throw new \DomainException('Genre name must not be empty');
         }
-        $this->roleName = trim($name);
+        $this->name = trim($name);
     }
 
     public function jsonSerialize(): array {

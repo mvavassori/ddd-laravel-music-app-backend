@@ -7,6 +7,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AlbumController;
+use App\Http\Controllers\GenreController;
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\PlaylistController;
 
@@ -92,4 +93,9 @@ Route::prefix('v1/playlists')->name(value: 'api.v1.playlists.')->group(function 
     Route::delete('/{id}', [PlaylistController::class, 'destroy'])->name('destroy');
     Route::get('/shuffle/{id}', [PlaylistController::class, 'shuffle'])->name('shuffle');
     Route::post('/next-song', [PlaylistController::class, 'next'])->name('next');
+});
+
+// Genres routes
+Route::prefix('v1/genres')->name(value: 'api.v1.plays.')->group(function () {
+    Route::post('/', [GenreController::class, 'store'])->name('store');
 });
