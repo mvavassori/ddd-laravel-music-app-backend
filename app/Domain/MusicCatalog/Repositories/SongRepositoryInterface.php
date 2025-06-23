@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Contracts\Domain\MusicCatalog\Repositories;
+namespace App\Domain\MusicCatalog\Repositories;
 
 use App\Domain\MusicCatalog\Entities\Song;
 use App\Domain\MusicCatalog\ValueObjects\SongId;
+use App\Domain\MusicCatalog\ValueObjects\GenreId;
 
 interface SongRepositoryInterface {
     public function find(SongId $id);
@@ -11,5 +12,5 @@ interface SongRepositoryInterface {
     public function create(Song $song);
     public function update(Song $song);
     public function delete(SongId $id);
-    // public function getSongsByGenreAtRandom($genre, $limit = 10);
+    public function getSongIdsByGenreAtRandom(GenreId $genreId, $limit = 10);
 }

@@ -44,8 +44,7 @@ class Artist implements JsonSerializable {
     }
 
     // methods used to update fields
-    public function updateName(string $name): void
-    {
+    public function updateName(string $name): void {
         $this->setName($name); // Uses existing validation
     }
     
@@ -64,7 +63,7 @@ class Artist implements JsonSerializable {
         if (empty($name)) {
             throw new \DomainException('Artist name must not be empty');
         }
-        $this->artistName = trim($name);
+        $this->name = trim($name);
     }
 
     public function jsonSerialize(): array {

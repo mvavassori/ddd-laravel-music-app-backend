@@ -5,8 +5,8 @@ namespace App\Infrastructure\Persistance\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class EloquentArtistModel extends Model {
-    protected $table = 'albums';
-    protected $incrementing = false;
+    protected $table = 'artists';
+    public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = [
         'id',

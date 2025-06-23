@@ -23,7 +23,7 @@ class EloquentArtistRepository implements ArtistRepositoryInterface {
     private RoleMapper $roleMapper;
     private SongMapper $songMapper;
     public function __construct(ArtistMapper $artistMapper, AlbumMapper $albumMapper, RoleMapper $roleMapper, SongMapper $songMapper) {
-        $this->mapper = $artistMapper;
+        $this->artistMapper = $artistMapper;
         $this->albumMapper = $albumMapper;
         $this->roleMapper = $roleMapper;
         $this->songMapper = $songMapper;
@@ -42,7 +42,7 @@ class EloquentArtistRepository implements ArtistRepositoryInterface {
     }
 
     public function findByName($name): Artist|null {
-        $eloquentArtist = EloquentArtistModel::where('name', '=', $name)->first();
+        $eloquentArtist = EloquentArtistModel::where(column: 'name', value: $name)->first();
         if (!$eloquentArtist) {
             return null;
         }

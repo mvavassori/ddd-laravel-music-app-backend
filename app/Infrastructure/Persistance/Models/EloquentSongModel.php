@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class EloquentSongModel extends Model {
     protected $table = 'songs';
+    public $incrementing = false;
 
     protected $fillable = [
+        'id',
         'title',
         'genre_id', // different from previous app
         'album_id'

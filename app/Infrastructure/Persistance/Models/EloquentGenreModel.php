@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class EloquentGenreModel extends Model {
     protected $table = 'genres';
+    public $incrementing = false;
     protected $fillable = [
+        'id',
         'name'
     ];
 

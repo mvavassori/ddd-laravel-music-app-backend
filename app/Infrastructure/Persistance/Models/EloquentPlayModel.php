@@ -9,6 +9,7 @@ class EloquentPlayModel extends Model
 {
     use HasFactory;
 
+    protected $table = 'plays';
     protected $fillable = [
         'user_id', 'song_id'
     ];

@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class EloquentAlbumModel extends Model {
     protected $table = 'albums';
+    public $incrementing = false;
     protected $fillable = [
+        'id',
         'title',
         'image_url',
         'description'

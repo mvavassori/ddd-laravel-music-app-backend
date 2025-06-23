@@ -13,13 +13,13 @@ class SongMapper {
 
         $id = new SongId($eloquentSong->id);
 
-        $album = Song::fromPersistance(
+        $song = Song::fromPersistance(
             $id,
             $eloquentSong->title,
             $eloquentSong->genreId,
             $eloquentSong->albumId
         );
-        return $album;
+        return $song;
     }
 
     public function toPersistence(Song $song) {

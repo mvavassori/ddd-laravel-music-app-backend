@@ -10,7 +10,6 @@ use App\Domain\MusicCatalog\ValueObjects\ArtistId;
 use App\Domain\MusicCatalog\ValueObjects\Contribution;
 use App\Domain\MusicCatalog\ValueObjects\AlbumImageUrl;
 
-// every album must have at least one artist with the role that it 
 class Album implements JsonSerializable {
     private AlbumId $id;
     private string $title;

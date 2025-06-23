@@ -10,7 +10,7 @@ use App\Domain\MusicCatalog\ValueObjects\GenreId;
 use App\Domain\MusicCatalog\ValueObjects\ArtistId;
 use App\Domain\MusicCatalog\Repositories\RoleRepositoryInterface;
 use App\Domain\MusicCatalog\Repositories\ArtistRepositoryInterface;
-use App\Contracts\Domain\MusicCatalog\Repositories\SongRepositoryInterface;
+use App\Domain\MusicCatalog\Repositories\SongRepositoryInterface;
 
 class SongApplicationService {
     private SongRepositoryInterface $songRepository;

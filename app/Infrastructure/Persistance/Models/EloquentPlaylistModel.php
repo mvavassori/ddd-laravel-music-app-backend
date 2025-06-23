@@ -5,12 +5,16 @@ namespace App\Infrastructure\Persistance\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class EloquentPlaylistModel extends Model {
+    protected $table = 'playlists';
     protected $fillable = [
+        'id',
         'name',
         'description',
         'type',
         'user_id'
     ];
+
+    public $incrementing = false;
 
     const TYPES = [
         'custom' => 'Custom',

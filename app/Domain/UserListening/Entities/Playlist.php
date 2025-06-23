@@ -22,12 +22,51 @@ class Playlist {
     }
 
     public function addSong(SongId $songId): void {
-        if (count($this->songIds) >= 20) {
-            throw new \DomainException('Mix can only have 20 songs');
-        }
+        // if (count($this->songIds) >= 20) {
+        //     throw new \DomainException('Mix can only have 20 songs');
+        // }
 
         if (!in_array($songId, $this->songIds)) {
             $this->songIds[] = $songId;
         }
+    }
+
+    // Getters
+    public function getId(): PlaylistId {
+        return $this->id;
+    }
+
+    public function getUserId(): UserId {
+        return $this->userId;
+    }
+
+    public function getName(): string {
+        return $this->name;
+    }
+
+    public function getType(): PlaylistType {
+        return $this->type;
+    }
+
+    // returns array of SongId type
+    public function getSongIds(): array {
+        return $this->songIds;
+    }
+
+    public function getSongCount(): int {
+        return count($this->songIds);
+    }
+
+    public static function fromPersistance(
+        PlaylistId $id,
+        UserId $userId,
+        string $name,
+        PlaylistType $type,
+        array $songIds = []
+    ) {
+        $playlist = new self($userId, $name, $type);
+        $playlist->id = $id;
+        $playlist->songIds = $songIds;
+        return $playlist;
     }
 }

@@ -13,4 +13,12 @@ class Play {
         $this->userId = $userId;
         $this->songId = $songId;
     }
+
+    public function getUserId(): UserId {
+        return $this->userId;
+    }
+
+    public function getSongId(): SongId {
+        return $this->songId;
+    }
 }

@@ -5,12 +5,13 @@ namespace App\Infrastructure\Persistance\Repositories;
 use Illuminate\Support\Facades\DB;
 use App\Domain\MusicCatalog\Entities\Song;
 use App\Domain\MusicCatalog\ValueObjects\SongId;
+use App\Domain\MusicCatalog\ValueObjects\GenreId;
 use App\Infrastructure\Persistance\Mappers\RoleMapper;
 use App\Infrastructure\Persistance\Mappers\SongMapper;
 use App\Infrastructure\Persistance\Mappers\AlbumMapper;
 use App\Infrastructure\Persistance\Mappers\ArtistMapper;
 use App\Infrastructure\Persistance\Models\EloquentSongModel;
-use App\Contracts\Domain\MusicCatalog\Repositories\SongRepositoryInterface;
+use App\Domain\MusicCatalog\Repositories\SongRepositoryInterface;
 
 class EloquentSongRepository implements SongRepositoryInterface {
     private ArtistMapper $artistMapper;
@@ -115,5 +116,21 @@ class EloquentSongRepository implements SongRepositoryInterface {
 
     public function delete(SongId $id) {
         EloquentSongModel::destroy($id->getValue());
+    }
+
+    public function getSongIdsByGenreAtRandom(GenreId $genreId, $limit = 10) {
+        $eloquentSongIds = EloquentSongModel::where('genre_id', $genreId->getValue())
+            ->inRandomOrder() // picks songs with specified genre randomly
+            ->limit($limit)
+            ->pluck('id');
+        if(empty($eloquentSongs)) {
+            return null; 
+        }
+        $songIds = [];
+        foreach ($eloquentSongIds as $eloquentSongId) {
+            $songIds[] = new SongId($eloquentSongId);
+        }
+        // array of SongId(s)
+        return $songIds;
     }
 }
